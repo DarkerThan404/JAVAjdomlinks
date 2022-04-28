@@ -7,6 +7,7 @@ import java.io.*;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Queue;
+import java.util.Stack;
 
 public class Main {
 
@@ -17,19 +18,17 @@ public class Main {
             Document doc = builder.build( in);
             Element rootNode = doc.getRootElement();
             List<Element> rootList = rootNode.getChildren("section");
-            Queue<List<Element>> queue = new LinkedList<>();
-            queue.add(rootList);
-            while(queue.size() > 0){
-                var poppedSections = queue.remove();
+            Stack<List<Element>> stack = new Stack<>();
+            stack.add(rootList);
+            while(stack.size() > 0){
+                var poppedSections = stack.pop();
                 for (Element target : poppedSections) {
                     List<Element> nested = target.getChildren("section");
                     if(nested.size() > 0) {
-                        queue.add(nested);
+                        stack.add(nested);
                     }
                     var Title = target.getChildren("title");
                     for(Element titleTarget : Title){
-                       //var contents = titleTarget.getContent();
-                       //var contentsSize = titleTarget.getContentSize();
                        var descendants = titleTarget.getDescendants();
                        String title = "";
                        for (Content desc : descendants){
