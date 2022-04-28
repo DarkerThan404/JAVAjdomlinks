@@ -51,10 +51,9 @@ public class Main {
                 if(!currentSection.equals(Tuple.InSection)){
                     currentSection = Tuple.InSection;
                     System.out.println(Tuple.InSection + ":");
-                    //System.out.println("    " + Tuple.LinkText + "(" + IDdictionary.get(Tuple.ID) + ")");
-                } //else {
-                System.out.println("    " + Tuple.LinkText + "(" + IDdictionary.get(Tuple.ID) + ")");
-                //}
+                }
+                System.out.println("    " + Tuple.LinkText + " (" + IDdictionary.get(Tuple.ID) + ")");
+
             }
 
         } catch (IOException | JDOMException ex) {
