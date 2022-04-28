@@ -1,13 +1,13 @@
 package cz.cuni.mff.java.hw.jdomlinks;
 
 public class SectionTuple {
-    public String SectionIn;
-    public String SectionOut;
+    public String ID;
+    public String InSection;
     public String LinkText;
 
-    public SectionTuple(String sectionIn, String sectionOut, String linkText) {
-        SectionIn = sectionIn;
-        SectionOut = sectionOut;
+    public SectionTuple(String id, String inSection, String linkText) {
+        ID = id;
+        InSection = inSection;
         LinkText = linkText;
     }
 }

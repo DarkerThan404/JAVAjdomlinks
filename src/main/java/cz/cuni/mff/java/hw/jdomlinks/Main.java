@@ -14,44 +14,49 @@ public class Main {
             SAXBuilder builder = new SAXBuilder();
             Document doc = builder.build( in);
             Element rootNode = doc.getRootElement();
-            var rootNodeChildrens = rootNode.getChildren("section");
+            var rootNodeDescendants = rootNode.getDescendants();
             String currentSectionTitle = "";
-            Map<String, SectionTuple> dict = new HashMap<>();
-            for (Element section : rootNodeChildrens){
-                currentSectionTitle = getFullTitle(section.getChildren("title"));
-                System.out.println(currentSectionTitle);
-                var stringId = getEmptyStringOrId(section);
-                if(!stringId.equals("")){
-                    addTuple(stringId,currentSectionTitle, "","", dict);
-                }
-                var descendants = section.getDescendants();
-                for(Content descendant : descendants){
-                    if(descendant instanceof Element){
-                        Element descElement = (Element) descendant;
-                        if(descElement.getName().equals("section")){
-                            currentSectionTitle = getFullTitle(descElement.getChildren("title"));
-                            //System.out.println(currentSectionTitle);
-                        }
-                        if(descElement.getName().equals("link")){
-                            var id = descElement.getAttribute("linkend").getValue();
-                            var linkText = getFullLinkText(descElement);
-                            System.out.println("Id :" + id + " Section: " + currentSectionTitle + " linktext: " + linkText);
-                            addTuple(id,"",currentSectionTitle,linkText, dict);
-                        }
-
-                        var id = descElement.getAttribute("id");
-                        if(id != null){
-                            //System.out.println("Id: {"+ id.getValue() + "} in section: " + currentSectionTitle);
-                            addTuple(id.getValue(),currentSectionTitle, "","", dict);
-                        }
+            List<SectionTuple> orderedList = new ArrayList<>();
+            Map<String, String> IDdictionary = new HashMap<>();
+            for(Content desc : rootNodeDescendants){
+                if(desc instanceof Element){
+                    Element element = (Element) desc;
+                    if(element.getName().equals("section")){
+                        currentSectionTitle = getFullTitle(element.getChildren("title"));
                     }
+
+                    if(element.getName().equals("link")){
+                        var id = element.getAttribute("linkend").getValue();
+                        var linkText = getFullLinkText(element);
+                        orderedList.add(new SectionTuple(id,currentSectionTitle,linkText));
+                    }
+
+                    var id = element.getAttribute("id");
+                    if(id != null){
+                        IDdictionary.put(id.getValue(),currentSectionTitle);
+                    }
+
                 }
             }
 
-            for(Map.Entry<String, SectionTuple> entry : dict.entrySet()){
-                System.out.println("Key = " + entry.getKey() + ", Value = {SectionIn: " + entry.getValue().SectionIn + ", SectionOut: " + entry.getValue().SectionOut + "," +
-                        "LinkText: " + entry.getValue().LinkText + "}");
+            /*for(var Tuple: orderedList){
+                System.out.println("Tuple: ID=" + Tuple.ID + ", Section=" + Tuple.InSection + ", Text=" + Tuple.LinkText);
             }
+
+            for(var entry : IDdictionary.entrySet()){
+                System.out.println("Entry key=" + entry.getKey() + ", value=" + entry.getValue());
+            }*/
+            String currentSection = "";
+            for(var Tuple: orderedList){
+                if(!currentSection.equals(Tuple.InSection)){
+                    currentSection = Tuple.InSection;
+                    System.out.println(Tuple.InSection + ":");
+                    //System.out.println("    " + Tuple.LinkText + "(" + IDdictionary.get(Tuple.ID) + ")");
+                } //else {
+                System.out.println("    " + Tuple.LinkText + "(" + IDdictionary.get(Tuple.ID) + ")");
+                //}
+            }
+
         } catch (IOException | JDOMException ex) {
             System.out.println(ex.getMessage());
         }
@@ -92,24 +97,15 @@ public class Main {
         return result;
     }
 
-    private static void addTuple(String key, String sectionIn, String sectionOut, String linkText, Map<String, SectionTuple> dict){
+    /*private static void addTuple(String key, String inSection, String linkText, List<SectionTuple> dict){
         if(dict.containsKey(key)){
             var out = dict.get(key);
-            if(out.SectionIn.equals("")){
-                out.SectionIn = sectionIn;
-            }
-            if(out.SectionOut.equals("")){
-                out.SectionOut = sectionOut;
-            }
 
-            if(out.LinkText.equals("")){
-                out.LinkText = linkText;
-            }
             dict.put(key, out);
         } else {
-            dict.put(key, new SectionTuple(sectionIn, sectionOut, linkText));
+            dict.put(key, new SectionTuple(inSection, linkText));
         }
-    }
+    }*/
 }
 /*
 Stack<List<Element>> stack = new Stack<>();
@@ -155,5 +151,51 @@ Stack<List<Element>> stack = new Stack<>();
                     }
                 }
             }
- */
+
+
+
+
+             for(Content descendant : descendants){
+                    if(descendant instanceof Element){
+                        Element descElement = (Element) descendant;
+                        if(descElement.getName().equals("section")){
+                            currentSectionTitle = getFullTitle(descElement.getChildren("title"));
+                            //System.out.println(currentSectionTitle);
+                        }
+                        if(descElement.getName().equals("link")){
+                            var id = descElement.getAttribute("linkend").getValue();
+                            var linkText = getFullLinkText(descElement);
+                            System.out.println("Id :" + id + " Section: " + currentSectionTitle + " linktext: " + linkText);
+                            addTuple(id,"",currentSectionTitle,linkText, dict);
+                        }
+
+                        var id = descElement.getAttribute("id");
+                        if(id != null){
+                            //System.out.println("Id: {"+ id.getValue() + "} in section: " + currentSectionTitle);
+                            addTuple(id.getValue(),currentSectionTitle, "","", dict);
+                        }
+                    }
+                }
+
+
+
+
+for (Element section : rootNodeChildrens){
+                currentSectionTitle = getFullTitle(section.getChildren("title"));
+                System.out.println(currentSectionTitle);
+                var stringId = getEmptyStringOrId(section);
+                if(!stringId.equals("")){
+                    addTuple(stringId,currentSectionTitle, "","", dict);
+                }
+                var descendants = section.getDescendants();
+
+            }
+
+            for(Map.Entry<String, SectionTuple> entry : dict.entrySet()){
+                System.out.println("Key = " + entry.getKey() + ", Value = {SectionIn: " + entry.getValue().SectionIn + ", SectionOut: " + entry.getValue().SectionOut + "," +
+                        "LinkText: " + entry.getValue().LinkText + "}");
+            }
+
+
+             */
 
