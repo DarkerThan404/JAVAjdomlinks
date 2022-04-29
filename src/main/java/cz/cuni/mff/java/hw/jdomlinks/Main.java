@@ -46,12 +46,12 @@ public class Main {
             Integer sectionCounter = 0;
             for(var Tuple: orderedList){
                 //System.out.println("sectionCounter: "+ sectionCounter + " tuple id: " + Tuple.SectionCounter);
-                if(sectionCounter != Tuple.SectionCounter){
+                if(sectionCounter != Tuple.SectionID){
                     //currentSection = Tuple.InSection;
-                    sectionCounter = Tuple.SectionCounter;
+                    sectionCounter = Tuple.SectionID;
                     System.out.println(Tuple.InSection + ":");
                 }
-                System.out.println("    " + Tuple.LinkText + " (" + IDdictionary.get(Tuple.ID) + ")");
+                System.out.println("    " + Tuple.LinkText + " (" + IDdictionary.get(Tuple.Link) + ")");
             }
 
         } catch (IOException | JDOMException ex) {

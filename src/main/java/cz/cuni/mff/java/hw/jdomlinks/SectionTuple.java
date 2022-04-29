@@ -1,15 +1,15 @@
 package cz.cuni.mff.java.hw.jdomlinks;
 
 public class SectionTuple {
-    public String ID;
+    public String Link;
     public String InSection;
     public String LinkText;
-    public Integer SectionCounter;
+    public Integer SectionID;
 
-    public SectionTuple(String id, String inSection, String linkText, Integer sectionCounter) {
-        ID = id;
+    public SectionTuple(String link, String inSection, String linkText, Integer sectionID) {
+        Link = link;
         InSection = inSection;
         LinkText = linkText;
-        SectionCounter = sectionCounter;
+        SectionID = sectionID;
     }
 }
