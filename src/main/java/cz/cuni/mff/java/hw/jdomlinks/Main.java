@@ -25,7 +25,6 @@ public class Main {
                     if(element.getName().equals("section")){
                         currentSectionTitle = getFullTitle(element.getChildren("title"));
                         counter++;
-                        //System.out.println("Title: " + currentSectionTitle + ", sectionId:  " + counter  );
                     }
 
                     if(element.getName().equals("link")){
@@ -42,12 +41,9 @@ public class Main {
                 }
             }
 
-            //String currentSection = "";
             Integer sectionCounter = 0;
             for(var Tuple: orderedList){
-                //System.out.println("sectionCounter: "+ sectionCounter + " tuple id: " + Tuple.SectionCounter);
                 if(sectionCounter != Tuple.SectionID){
-                    //currentSection = Tuple.InSection;
                     sectionCounter = Tuple.SectionID;
                     System.out.println(Tuple.InSection + ":");
                 }
